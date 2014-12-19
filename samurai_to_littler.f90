@@ -13,18 +13,19 @@ program samurai_to_littler
    USE NETCDF
    IMPLICIT NONE
    
-   CHARACTER (len=*), PARAMETER :: FILE_NAME = "samurai_XYZ_analysis.nc"
+   CHARACTER (len=*), PARAMETER :: FILE_NAME = "test.nc"
    CHARACTER (len=5) :: statid = "STNID"
    CHARACTER (len=6) ::  platform = "FM-35"
-   INTEGER, PARAMETER :: NLATS = 101, &
-                         NLONS = 101, &
+   INTEGER, PARAMETER :: NLATS = 151, &
+                         NLONS = 151, &
                          NLEVS = 33
    INTEGER :: ncid, sid, drid, latid, lonid, elevid, &
-                pid, i, j, imax, jmax
+                pid,ppid, i, j, imax, jmax
    INTEGER :: unit_out = 20
    REAL ::  data_spd(NLATS,NLONS,NLEVS), &
             data_dir(NLATS,NLONS,NLEVS),&
             data_p(NLATS,NLONS,NLEVS),&
+            data_pp(NLATS,NLONS,NLEVS),&
             pu(NLATS,NLONS,NLEVS),&
             data_lat(NLATS),&
             data_lon(NLONS),&
@@ -38,6 +39,7 @@ program samurai_to_littler
    call check( nf90_inq_varid(ncid,"longitude",lonid) )
    call check( nf90_inq_varid(ncid,"altitude",elevid) )
    call check( nf90_inq_varid(ncid,"P",pid) )
+   call check( nf90_inq_varid(ncid,"PP",ppid) )
 
    call check( nf90_get_var(ncid,sid,data_spd) )
    call check( nf90_get_var(ncid,drid,data_dir) )
@@ -45,10 +47,11 @@ program samurai_to_littler
    call check( nf90_get_var(ncid,lonid,data_lon) )
    call check( nf90_get_var(ncid,elevid,data_elev) )
    call check( nf90_get_var(ncid,pid,data_p) )
+   call check( nf90_get_var(ncid,ppid,data_pp) )
    
    call check( nf90_close(ncid) )
    
-   pu = 100 * data_p 
+   pu = 100 * (data_p+data_pp)
    data_elev = 1000 * data_elev
    
    imax = size(data_spd,1)
@@ -56,10 +59,12 @@ program samurai_to_littler
    open( unit=unit_out, file='test_f90_samurai_littler' )
    
    
-   !do i = 25,75,5
+  ! do i = 25,75,5
    !    do j = 25,75,5
-    do i = 1,imax
-        do j = 1,jmax
+   do i = 60,105,5
+        do j = 50,105,5
+    !do i = 1,imax
+     !   do j = 1,jmax
             call write_littler_samurai( data_elev,data_spd(i,j,:),data_dir(i,j,:), pu(i,j,:), data_lat(j), &
                         data_lon(i),0.00,'2014-07-03-12','STAID',platform,unit_out )
         enddo
