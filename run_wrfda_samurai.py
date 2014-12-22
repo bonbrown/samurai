@@ -2,6 +2,8 @@
 
 import sys, os
 
+# MUST edit namelist.obsproc and namelist.input to match 
+# your choice of domains
 domain = str(3)
 
 rtpth = '/Users/brbrown/WRF/arthur2014/da/'
