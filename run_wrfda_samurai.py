@@ -9,12 +9,12 @@ oppth = rtpth + 'obwork'
 dapth = rtpth + 'varwork'
 smrpth = '/Users/brbrown/matlab_scripts/samurai/'
 toolpth = '/Users/brbrown/tools/datools/graphics/ncl/'
-imagenm = '_pp_nobg_d0'
+imagenm = '_nobg5km_d0'
 
 # create obs file
 os.chdir(smrpth)
 # compile samurai_to_littler if necessary
-os.system('gfortran samurai_to_littler.f90 -o samurai_test -I/usr/local/Cellar/netcdf/4.3.2/include -L/usr/local/Cellar/netcdf/4.3.2/lib -lnetcdff -lnetcdf')
+os.system('gfortran samurai_to_littler.f90 -o samurai_test -I/usr/local/Cellar/netcdf/4.3.2_1/include -L/usr/local/Cellar/netcdf/4.3.2_1/lib -lnetcdff -lnetcdf')
 os.system('./samurai_test')
 
 # clean directories and recopy essential files
